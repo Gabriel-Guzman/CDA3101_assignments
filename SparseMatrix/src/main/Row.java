@@ -18,6 +18,8 @@ public class Row {
 		this.row = row;
 	}
 	
+	
+	// Returns if the Row contains only zeroes. Basically 'isEmpty()'
 	public boolean isAllZeroes() {
 		return this.head == null;
 	}
@@ -35,10 +37,12 @@ public class Row {
 	
 	// Pushes a new Node to the row
 	public void add(int data, int col) {
-		if (col >= maxSize) throw new Error("Error: attempted to add new element at column position " + col + " in Row instance of size " + maxSize);
+		if (col >= maxSize) throw new Error("Error: attempted to add new element at column index " + col + " in Row instance of size " + maxSize);
 		Node existingNode = this.referenceAt(col); // Either a reference to the node found at 'col' or null.
 		
 		if (existingNode == null) {
+			// There does not exist a node in the Row with a column property equal to 'col'
+			
 			if (data == 0) {
 				return;
 			} else {
@@ -56,6 +60,7 @@ public class Row {
 			}
 			
 		} else {
+			// existingNode is the reference to the found node
 			if (data == 0) {
 				makeZero(existingNode);
 			} else {

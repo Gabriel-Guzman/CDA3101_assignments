@@ -46,7 +46,7 @@ public class SparseMatrix implements SparseInterface {
 			temp = temp.next;
 		}
 		
-		return null;
+		return temp;
 	}
 
 	@Override
@@ -60,12 +60,66 @@ public class SparseMatrix implements SparseInterface {
 			return;
 		}
 		
-		Row temp = this.head;
-		while(temp.next != null || temp.next.row() == row) {
+		Row existingRow = this.referenceAt(row);
+		
+		// TODO: Actually add, we're at the row before the last OR the row before the target row
+		
+		if (existingRow == null) {
+			// There does not exist a row in the sparse matrix with the 'row' index equal to row
+			
+			if (data == 0) {
+				return;
+			} else {
+				// This is the only case where we actually add a row.
+				
+				if (head == null) {
+					head = new Row(this.numCols, row);
+					head.add(data, col);
+					return;
+				}
+				
+				Row temp = head;
+				while (temp.next != null) temp = temp.next;
+				
+				temp.next = new Row(this.numCols, row);
+			}
+			
+		} else {
+			// existingRow is the reference to the found Row
+			if (data == 0 && existingRow.isAllZeroes()) {
+				// TODO: Implement removeRow
+				this.removeRow(existingRow);
+				return;
+				
+			} else {
+				existingRow.add(data, col);
+			}
+		}
+		
+	}
+	
+	// Removes the Row referenced by 'ref'.
+	// This method is private due to the fact that a reference to a Row can
+	// and should not be publicly accessible.
+	private void removeRow(Row ref) {
+		Row temp = head;
+		
+		if (temp == ref) {
+			// Will make head null if head is the only element
+			this.head = temp.next;
+			return; 
+		}
+		
+		while (temp.next != ref && temp.next != null) {
 			temp = temp.next;
 		}
 		
-		// TODO: Actually add, we're at the row before the last OR the row before the target row
+		if (temp.next == null) {
+			// ref does not exist in the SparseMatrix
+			throw new Error("Attempted to remove row that does not exist in SparseMatrix");
+		}
+		
+		temp.next = temp.next.next;
 	}
 
 	@Override
@@ -90,6 +144,16 @@ public class SparseMatrix implements SparseInterface {
 	public SparseInterface multiplyMatrices(SparseInterface matrixToMultiply) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public String toString() {
+		Row temp = head;
+		String result = "";
+		while (temp != null) {
+			result += temp.toString();
+		}
+		
+		return result;
 	}
 
 }
