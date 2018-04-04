@@ -139,7 +139,7 @@ public class Row {
 		return 0;
 	}
 	
-	// Returns the calculated size of the row.
+	// Returns the conceptual size of the row.
 	public int size() {
 		return this.maxSize;
 	}
@@ -159,12 +159,15 @@ public class Row {
 		return null;
 	}
 	
-	// Returns a string of the Row elements sorted by col.
+	// Returns a String representing the current Row instance.
 	public String toString() {
 		String result = "";
 		
 		for (int i = 0; i < this.maxSize; i++) {
-			result += this.at(i) + " ";
+			Node tempNode = this.referenceAt(i);
+			if (tempNode != null) {
+				result += this.row() + " " + tempNode.col() + " " + tempNode.data() + "\n";
+			}
 		}
 		
 		return result;

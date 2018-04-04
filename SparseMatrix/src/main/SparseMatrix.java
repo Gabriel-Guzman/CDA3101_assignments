@@ -3,34 +3,31 @@ package main;
 public class SparseMatrix implements SparseInterface {
 	
 	private Row head = null;
-	private int numRows, numCols;
+	private int numRows = 3, numCols = 3;
 	
 	public SparseMatrix() {
-		this.numRows = this.numCols = 3;
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		this.head = null;
 	}
 
 	@Override
 	public void setSize(int numRows, int numCols) {
-		// TODO Auto-generated method stub
-		
+		this.clear();
+		this.numRows = numRows;
+		this.numCols = numCols;
 	}
 
 	@Override
 	public int getNumRows() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.numRows;
 	}
 
 	@Override
 	public int getNumCols() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.numCols;
 	}
 	
 	private Row referenceAt(int row) {
@@ -122,16 +119,23 @@ public class SparseMatrix implements SparseInterface {
 		temp.next = temp.next.next;
 	}
 
-	@Override
+	// Removes the element at the specified row and col. If the row is all zeroes, it removes it too.
 	public void removeElement(int row, int col) {
-		// TODO Auto-generated method stub
+		if (row >= this.getNumRows() || col >= this.getNumRows()) throw new Error("Attempted to remove element at out of bounds index from SparseMatrix.");
 		
+		Row temp = this.referenceAt(row);
+		if (temp != null) {
+			temp.makeZero(col);
+			
+			if (temp.isAllZeroes()) {
+				this.removeRow(temp);
+			}
+		}
 	}
 
-	@Override
+	
 	public int getElement(int row, int col) {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.referenceAt(row).at(col);
 	}
 
 	@Override
@@ -146,11 +150,14 @@ public class SparseMatrix implements SparseInterface {
 		return null;
 	}
 	
+	// Returns a string representing the SparseMatrix.
 	public String toString() {
 		Row temp = head;
 		String result = "";
+		
 		while (temp != null) {
 			result += temp.toString();
+			temp = temp.next;
 		}
 		
 		return result;
