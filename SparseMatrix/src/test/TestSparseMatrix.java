@@ -20,8 +20,11 @@ public class TestSparseMatrix {
 		sm.addElement(0, 0, 1);
 		p(sm.toString());
 		
-		p("Testing add element once.");
-		sm.addElement(0, 0, 1);
+		p("Testing adding multiple elements");
+		sm.addElement(0, 0, 2);
+		sm.addElement(0, 0, 2);
+		sm.addElement(0, 0, 2);
+		sm.addElement(0, 0, 2);
 		p(sm.toString());
 	}
 	
